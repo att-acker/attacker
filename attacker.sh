@@ -6,7 +6,7 @@ ATTACK_CONNECTIONS=1000
 ATTACK_DURATION=3600s
 
 TARGETS_FILE="targets.txt"
-targets=$(cat $TARGETS_FILE)
+targets=( $( cat $TARGETS_FILE ) )
 
 while true
 do
